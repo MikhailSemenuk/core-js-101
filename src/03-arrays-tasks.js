@@ -428,14 +428,16 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(arr) {
+function sortCitiesArray(arrInput) {
+  const arr = arrInput.slice();
   function compare(a, b) {
     if (a.country === b.country) {
       return a.city > b.city ? 1 : -1;
     }
     return a.country > b.country ? 1 : -1;
   }
-  return arr.sort((a, b) => compare(a, b));
+  const answer = arr.sort((a, b) => compare(a, b));
+  return answer;
 }
 
 /**
@@ -529,8 +531,18 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  return array.reduce((answer, item) => {
+    const key = keySelector(item);
+    const value = valueSelector(item);
+
+    if (!answer.has(key)) {
+      answer.set(key, [].concat(value));
+    } else {
+      answer.set(key, answer.get(key).concat(value));
+    }
+    return answer;
+  }, new Map());
 }
 
 
@@ -547,8 +559,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return [].concat(...arr.map((item) => childrenSelector(item)));
 }
 
 
@@ -564,8 +576,8 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  return indexes.reduce((currentElement, item) => currentElement[item], arr);
 }
 
 
@@ -587,8 +599,12 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  const middleIndex = Math.trunc(arr.length / 2);
+  const middle = (arr.length % 2) === 1 ? arr.slice(middleIndex, middleIndex + 1) : [];
+  const head = arr.slice(0, middleIndex);
+  const tail = arr.length % 2 === 1 ? arr.slice(middleIndex + 1) : arr.slice(middleIndex);
+  return [].concat(tail, middle, head);
 }
 
 

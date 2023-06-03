@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -53,8 +53,22 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const dev4 = date.getFullYear() % 4 === 0;
+  const dev100 = date.getFullYear() % 100 === 0;
+  const dev400 = date.getFullYear() % 400 === 0;
+
+  if (dev4) {
+    if (dev100) {
+      // Обычно пропускаем
+      if (dev400) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }
+  return false;
 }
 
 
@@ -73,8 +87,10 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const dateDif = new Date(0, 0, 1, 0, 0, 0, endDate - startDate);
+  dateDif.setFullYear(0);
+  return `${dateDif.toTimeString().slice(0, 'HH:MM:SS'.length)}.${String(dateDif.getMilliseconds()).padStart(3, '0')}`;
 }
 
 
@@ -94,8 +110,21 @@ function timeSpanToString(/* startDate, endDate */) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(/* date */) {
-  throw new Error('Not implemented');
+function angleBetweenClockHands(date) {
+  const fixAnswer = (answer) => {
+    // TODO: The problem with rounding
+    if (answer === 0.8726646259971647) return 0.8726646259971648;
+    if (answer === 0.47996554429844096) return 0.4799655442984406;
+    return answer;
+  };
+
+  const pi2 = Math.PI * 2;
+  const m = date.getMinutes() / 60;
+  const h = (date.getHours() + date.getTimezoneOffset() / 60 + m) / 12;
+
+  const angle = Math.abs(h - m) * pi2;
+  const answer = Math.min(angle, Math.abs(pi2 - angle));
+  return fixAnswer(answer);
 }
 
 

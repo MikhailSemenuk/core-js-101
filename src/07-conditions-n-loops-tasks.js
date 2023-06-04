@@ -27,8 +27,20 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  if (num % 5 === 0 && num % 3 === 0) {
+    return 'FizzBuzz';
+  }
+
+  if (num % 3 === 0) {
+    return 'Fizz';
+  }
+
+  if (num % 5 === 0) {
+    return 'Buzz';
+  }
+
+  return num;
 }
 
 
@@ -43,8 +55,10 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  if (n === 1) return n;
+
+  return n * getFactorial(n - 1);
 }
 
 
@@ -80,8 +94,20 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  // Треугольник существует только тогда, когда сумма любых двух его сторон больше третьей.
+  // Т.е. не существует когда сумма двух сторон меньше или равно третьей
+  const sumArray = (array) => array.reduce((sum, current) => sum + current, 0);
+
+  const array = [a, b, c];
+
+  for (let index = 0; index < array.length; index += 1) {
+    if (sumArray(array) - array[index] <= array[index]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 
@@ -117,8 +143,41 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  class Cordinate {
+    constructor(y, x) {
+      this.y = y;
+      this.x = x;
+    }
+
+    cordinateIn(rectange) {
+      return this.y >= rectange.TL.y && this.y <= rectange.BL.y
+        && this.x >= rectange.TL.x && this.x <= rectange.TR.x;
+    }
+  }
+
+  function createCordinatesInRectange() {
+    this.TL = new Cordinate(this.top, this.left);
+    this.TR = new Cordinate(this.top, this.left + this.width);
+    this.BL = new Cordinate(this.top + this.height, this.left);
+    this.BR = new Cordinate(this.top + this.height, this.left + this.width);
+  }
+  // rect2.createCordinatesInRectange = createCordinatesInRectange.createCordinatesInRectange;
+  const create1 = createCordinatesInRectange.bind(rect1);
+  const create2 = createCordinatesInRectange.bind(rect2);
+  create1();
+  create2();
+
+  const array1 = [rect1.TL, rect1.TR, rect1.BL, rect1.BR];
+
+  for (let index = 0; index < array1.length; index += 1) {
+    const element = array1[index];
+
+    if (element.cordinateIn(rect2)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 

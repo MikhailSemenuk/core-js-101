@@ -110,21 +110,22 @@ function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,18, 0) => Math.PI
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
-function angleBetweenClockHands(date) {
-  const fixAnswer = (answer) => {
-    // TODO: The problem with rounding
-    if (answer === 0.8726646259971647) return 0.8726646259971648;
-    if (answer === 0.47996554429844096) return 0.4799655442984406;
-    return answer;
-  };
+function angleBetweenClockHands() {
+  throw new Error('Not implemented');
+  // const fixAnswer = (answer) => {
+  //   // TODO: The problem with rounding
+  //   if (answer === 0.8726646259971647) return 0.8726646259971648;
+  //   if (answer === 0.47996554429844096) return 0.4799655442984406;
+  //   return answer;
+  // };
 
-  const pi2 = Math.PI * 2;
-  const m = date.getMinutes() / 60;
-  const h = (date.getHours() + date.getTimezoneOffset() / 60 + m) / 12;
+  // const pi2 = Math.PI * 2;
+  // const m = date.getMinutes() / 60;
+  // const h = (date.getHours() + date.getTimezoneOffset() / 60 + m) / 12;
 
-  const angle = Math.abs(h - m) * pi2;
-  const answer = Math.min(angle, Math.abs(pi2 - angle));
-  return fixAnswer(answer);
+  // const angle = Math.abs(h - m) * pi2;
+  // const answer = Math.min(angle, Math.abs(pi2 - angle));
+  // return fixAnswer(answer);
 }
 
 
